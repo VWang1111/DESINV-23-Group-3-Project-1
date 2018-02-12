@@ -1,133 +1,95 @@
-
-
+var randomXA;
+var randomYA;
+var randomXS;
+var randomYS;
 var freqA = 110;
 var freqC = 130.81;
 var freqE = 164.81;
 var freqG = 196; 
 
-var oscA, oscS, oscD, oscF;
+var osc;
 
 var playing = false;
 
-/*var rectA = false;
-var rectC = false;
-var rectE = false;
-var rectG = false;*/
-
 function setup() {
+  createCanvas(400, 400);
   backgroundColor = color(255);
+  background(backgroundColor);
   colorMode (HSB);
   textAlign(CENTER);
-  createCanvas(400, 400);
-
   
-  rect (0, (height/2)-1, width/4, height/2) //RECT A
-  textSize(25);
-  text('A', width/9.5, height-30);
-  rect (width/4, (height/2)-1, width/4, height/2) //RECT B
-  text('S', width/2.8, height-30);
-  rect (width/2, (height/2)-1, width/4, height/2) //RECT C
-  text('D', width/2+width/9.5, height-30);
-  rect (width/2+width/4, (height/2)-1, width/4-1, height/2) //RECT D
-	text('F', width/2+width/2.8, height-30);
+  noStroke();
   
-  oscA = new p5.Oscillator();
-  oscA.setType('square');
-  oscA.freq(freqA);
-  oscA.amp(0);
-  oscA.start();
   
-  oscC = new p5.Oscillator();
-  oscC.setType('square');
-  oscC.freq(freqC);
-  oscC.amp(0);
-  oscC.start();
+  osc = new p5.Oscillator();
+  osc.setType('square');
+  osc.amp(0);
+  osc.start();
   
-  oscE = new p5.Oscillator();
-  oscE.setType('square');
-  oscE.freq(freqE);
-  oscE.amp(0);
-  oscE.start();
   
-  oscG = new p5.Oscillator();
-  oscG.setType('square');
-  oscG.freq(freqG);
-  oscG.amp(0);
-  oscG.start();
 }
 
-function draw() {
-
-}
+var sizeA = 0;
+var sizeS = 0;
+var keyPress = 0;
+var keyA = false;
+var keyS = false;
+var colorA;
+var colorS;
 
 function keyPressed() {
-  print("got key press for ", key);
-  var osc;
-  if (key == 'A') {
-    osc = oscA;
-  } else if (key == 'S') {
-    osc = oscC;
-  } else if (key == 'D') {
-    osc = oscE;
-  } else if (key == 'F') {
-    osc = oscG;
-  }
-  if (osc) {
-    osc.amp(0.5, 0.1);
-    playing = true;
-  }
-  
-    if (key == 'A'){ //red
-    fill (0,50, 100, 0.3);
-    rect (0, (height/2)-1, width/4, height/2);
-  } else if (key == 'S'){ //green
-    fill (90, 50, 100, 0.3);
-    rect (width/4, (height/2)-1, width/4, height/2);
-  } else if (key == 'D'){ //blue
-    fill (180, 50, 100, 0.3);
-    rect (width/2, (height/2)-1, width/4, height/2);
-  } else if (key == 'F'){ //purple
-    fill (270, 50, 100, 0.3);
-    rect (width/2+width/4, (height/2)-1, width/4-1, height/2);
-  }
-
+  if (key == 'A'){
+    keyA = true;
+    keyPress = 1;
+    osc.freq(freqA);
+    osc.amp(1);
+    colorA = random(0,60);
+    fill(colorA,40,100);
+  } else if (key == 'S'){
+    keyS = true;
+    keyPress = 2;
+    osc.freq(freqC);
+    osc.amp(1);
+    colorS = random(90,150);
+    fill(colorS,40,100);
+  } else if (keyCode == 32){
+    background(backgroundColor);
+    sizeA = 0;
+    sizeS = 0;
+    keyPress = 0;
+}
+  randomXA = random(width);
+	randomYA = random(height);
+  randomXS = random(width);
+	randomYS = random(height);
 }
 
 function keyReleased() {
-  print("got key release for ", key);
-  var osc;
-  if (key == 'A') {
-    osc = oscA;
-  } else if (key == 'S') {
-    osc = oscC;
-  } else if (key == 'D') {
-    osc = oscE;
-  } else if (key == 'F') {
-    osc = oscG;
-  }
-  if (osc) {
-    osc.amp(0, 0.5);
-    playing = false;
-  }
-   if (key == 'A'){ //red
-    fill (250);
-    rect (0, (height/2)-1, width/4, height/2);
-    fill (0)
-    text('A', width/9.5, height-30);
-  } else if (key == 'S'){ //green
-    fill (250);
-    rect (width/4, (height/2)-1, width/4, height/2);
-    fill (0)
-    text('S', width/2.8, height-30);
-  } else if (key == 'D'){ //blue
-    fill (250);
-    rect (width/2, (height/2)-1, width/4, height/2);
-    fill (0)
-    text('D', width/2+width/9.5, height-30);
-  } else if (key == 'F'){ //purple
-    fill (250);
-    rect (width/2+width/4, (height/2)-1, width/4-1, height/2);
-    fill (0);
-    text('F', width/2+width/2.8, height-30);
+  if (key == 'A'){
+    keyPress = 0;
+    sizeA = 0;
+    osc.amp(0);
+  } else if (key == 'S'){
+    keyPress = 0;
+    sizeS = 0;
+    osc.amp(0);
   }
 }
+
+
+function draw() {
+  
+  if (keyPress == 1) {
+    fill (colorA, 40, 100);
+    ellipse (randomXA, randomYA, sizeA, sizeA);
+    sizeA += 2;
+  } else if (keyPress == 2) {
+    fill (colorS, 40, 100);
+    ellipse (randomXS, randomYS, sizeS, sizeS);
+    sizeS += 2;
+  }
+  
+
+}
+
+
