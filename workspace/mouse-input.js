@@ -1,4 +1,4 @@
-
+var lpf, lpfHz, lpfQ;
 
 var freqA = 110;
 var freqC = 130.81;
@@ -16,6 +16,8 @@ function setup() {
   createCanvas(400, 400);
 	
 	lpf = new p5.LowPass();
+	//lpf.drywet(1.0)
+ 
   
   rect (0, (height/2)-1, width/4, height/2) //RECT A
   textSize(25);
@@ -32,27 +34,36 @@ function setup() {
   oscA.freq(freqA);
   oscA.amp(0);
   oscA.start();
+	oscA.connect(lpf);
   
   oscC = new p5.Oscillator();
   oscC.setType('square');
   oscC.freq(freqC);
   oscC.amp(0);
   oscC.start();
+	oscA.connect(lpf);
   
   oscE = new p5.Oscillator();
   oscE.setType('square');
   oscE.freq(freqE);
   oscE.amp(0);
   oscE.start();
+	oscA.connect(lpf);
   
   oscG = new p5.Oscillator();
   oscG.setType('square');
   oscG.freq(freqG);
   oscG.amp(0);
   oscG.start();
+	oscA.connect(lpf);
 }
 
 function draw() {
+   lpfHz = map(mouseX, 0.0, width, 20.0, 800.0);
+  lpfQ = map(mouseY, 0.0, height, 0.0, 100.0);
+  lpf.freq(lpfHz);
+  lpf.res(lpfQ);
+	
 
 }
 

@@ -9,13 +9,17 @@ var oscA, oscS, oscD, oscF;
 
 var playing = false;
 
+/*var rectA = false;
+var rectC = false;
+var rectE = false;
+var rectG = false;*/
+
 function setup() {
   backgroundColor = color(255);
   colorMode (HSB);
   textAlign(CENTER);
   createCanvas(400, 400);
-	
-	lpf = new p5.LowPass();
+
   
   rect (0, (height/2)-1, width/4, height/2) //RECT A
   textSize(25);
