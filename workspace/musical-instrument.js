@@ -6,10 +6,13 @@ var freq = 0;
 function setup () {
 	createCanvas(400, 400);
   colorMode(HSB);
-	print("type in some notes");
-	print("use ~ for rests");
+	textSize(12);
+	background(0);
+	fill(255);
+	text("type in some notes", 10, height - 30);
+	text("use ~ for rests", 10, height-20);
+	text("or just use 1-9 for classic 303 acid presets", 10, height-10);
 	frameRate(2);
-  background(0);
 	osc = new p5.Oscillator();
 	osc.setType('square');
 	osc.amp(0);
@@ -51,11 +54,13 @@ function draw () {
       line(mouseX, mouseY, i, height)
     }  
   }
-	timestep++;
+	if(notes.length > 15){
+		timestep++;
     if (timestep > notes.length - 1){
       timestep = 0;
       background(0);
     }
+	}
 }
 
 function keyPressed(){
