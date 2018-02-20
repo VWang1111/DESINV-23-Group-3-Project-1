@@ -1,20 +1,32 @@
 var notes = [];
 var timestep = 0;
+var osc = 0;
+var freq = 0;
 
 function setup () {
 	createCanvas(400, 400);
-  colorMode(HSB)
+  colorMode(HSB);
+	print("type in some notes");
+	print("use ~ for rests");
 	frameRate(2);
   background(0);
-
+	osc = new p5.Oscillator();
+	osc.setType('square');
+	osc.amp(0);
+	osc.start()
 		
 }
 
 function draw () {
   if(notes.length > 15) {
+		osc.amp(1);
+		freq = midiToFreq(notes[timestep]);
+		osc.freq(freq);
+		
+		
     var currentNote = notes[timestep]; //current note is between 48 and 60
     var rawInterval = currentNote - 47; //interval is between 1 and 13
-    var interval = rawInterval * 10; // interval multiplier to space out lines on the canvas is between 10 and 130
+    var interval = rawInterval * 25; // interval multiplier to space out lines on the canvas is between 10 and 130
     var color = (360/13) * rawInterval; //split color wheel into 13
     for (i = 0; i < height; i += interval){
       stroke(color, 100, 100);
@@ -45,6 +57,9 @@ function draw () {
 }
 
 function keyPressed(){
+	if(keyCode == 49){
+		notes = [59, 57, 48, 57, 60, 57, 48, 51, 57, 51, 60, 57, 48, 51, 57, 59];
+	}
 	if(notes.length > 15){
 		return false;
 	}
