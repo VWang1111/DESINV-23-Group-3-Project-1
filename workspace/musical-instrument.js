@@ -18,10 +18,13 @@ function setup () {
 }
 
 function draw () {
-  if(notes.length > 15) {
+  if(notes.length > 15 && notes[timestep] != 0) {
 		osc.amp(1);
-		freq = midiToFreq(notes[timestep]);
-		osc.freq(freq);
+			freq = midiToFreq(notes[timestep]);
+			osc.freq(freq);
+	
+		
+		
 		
 		
     var currentNote = notes[timestep]; //current note is between 48 and 60
@@ -46,14 +49,13 @@ function draw () {
     for (i = 0; i < width; i += interval){
       stroke(color, 100, 100);
       line(mouseX, mouseY, i, height)
-    }
-
-    timestep++;
+    }  
+  }
+	timestep++;
     if (timestep > notes.length - 1){
       timestep = 0;
       background(0);
     }
-  }
 }
 
 function keyPressed(){
