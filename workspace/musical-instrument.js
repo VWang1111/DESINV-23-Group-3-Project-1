@@ -1,3 +1,18 @@
+//Envelope stuff
+var env;
+var attLevel = 1.0;
+var releaseLevel = 0;
+var attTime = 0.001;
+var decayTime = 0.3;
+var susLevel = 0;
+var releaseTime = 0.3;
+
+//Filter stuff
+var filter1 = 0;
+var filter2 = 0;
+var filterHz = 0; 
+var filterQ = 20;  //make it squeel
+
 var notes = [];
 var timestep = 0;
 var osc = 0;
@@ -11,24 +26,40 @@ function setup () {
 	fill(255);
 	text("type in some notes", 10, height - 30);
 	text("use ~ for rests", 10, height-20);
-	text("or just use 1-9 for classic 303 acid presets", 10, height-10);
-	frameRate(2);
+	text("or just use 1-9 for classic tb-303 acid lines", 10, height-10);
+	frameRate(8);  //16th notes @ 120bpm
+	
+	//inititalizes the envelope, creates the shape, and sets its range
+	env = new p5.Env();
+	env.setADSR(attTime, decayTime, susLevel, releaseTime);
+	env.setRange(attLevel, releaseLevel);
+	
+	//creates 2 12 dB/oct low pass filters in series (to make one 24 dB/oct low pass filter)
+	filter1 = new p5.LowPass();
+	filter2 = new p5.LowPass();
+	
+	//creates oscillator, passes it through both LPFs, binds envelope to "VCA"
 	osc = new p5.Oscillator();
-	osc.setType('square');
-	osc.amp(0);
+	osc.setType('square');  //could be a saw too...
+	osc.amp(env);
+	osc.disconnect(); //Just in case...
+	osc.connect(filter1);
+	osc.connect(filter2);
 	osc.start()
-		
 }
 
 function draw () {
-  if(notes.length > 15 && notes[timestep] != 0) {
-		osc.amp(1);
-			freq = midiToFreq(notes[timestep]);
-			osc.freq(freq);
-	
+  if(notes.length > 15 && notes[timestep] !== 0) {  //who needs more than 16 notes anyways
+			
+		filterHz = map(mouseY, 0, height, 15000, 20);  //maps the height of the mouse to the filter cutoff
+		filter1.freq(filterHz );
+		filter2.freq(filterHz);
+		filter1.res(filterQ);
+		filter2.res(filterQ);
 		
-		
-		
+		freq = midiToFreq(notes[timestep]);		//changes MIDI data into something p5.osc can actually read (Hz)
+		osc.freq(freq);
+		env.play(); 		//pings envelope
 		
     var currentNote = notes[timestep]; //current note is between 48 and 60
     var rawInterval = currentNote - 47; //interval is between 1 and 13
@@ -63,6 +94,8 @@ function draw () {
 	}
 }
 
+
+//"Keyboard keyboard."  Binds letters to MIDI notes and adds them to notes[]
 function keyPressed(){
 	if(keyCode == 49){
 		notes = [59, 57, 48, 57, 60, 57, 48, 51, 57, 51, 60, 57, 48, 51, 57, 59];
@@ -116,5 +149,5 @@ function keyPressed(){
 		print("NOT A NOTE");
 		return false;
 	}
-	print(notes.length);
+	print(notes.length);  
 }
