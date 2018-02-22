@@ -26,8 +26,8 @@ function setup () {
 	fill(255);
 	text("type in some notes", 10, height - 30);
 	text("use ~ for rests", 10, height-20);
-	text("or just use 1-9 for classic tb-303 acid lines", 10, height-10);
-	frameRate(8);  //16th notes @ 120bpm
+	text("or just use 1-9 for classic bass lines", 10, height-10);
+	frameRate(9);  //135bpm (ish)
 	
 	//inititalizes the envelope, creates the shape, and sets its range
 	env = new p5.Env();
@@ -51,7 +51,8 @@ function setup () {
 function draw () {
   if(notes.length > 15 && notes[timestep] !== 0) {  //who needs more than 16 notes anyways
 			
-		filterHz = map(mouseY, 0, height, 15000, 20);  //maps the height of the mouse to the filter cutoff
+		filterHz = map(mouseX, 0, width, 15000, true);  //maps the height of the mouse to the filter cutoff
+		filterQ = map(mouseY, 0, height, 50, true);
 		filter1.freq(filterHz );
 		filter2.freq(filterHz);
 		filter1.res(filterQ);
@@ -98,7 +99,31 @@ function draw () {
 //"Keyboard keyboard."  Binds letters to MIDI notes and adds them to notes[]
 function keyPressed(){
 	if(keyCode == 49){
-		notes = [59, 57, 48, 57, 60, 57, 48, 51, 57, 51, 60, 57, 48, 51, 57, 59];
+		notes = [59, 57, 48, 57, 60, 57, 48, 51, 57, 51, 60, 57, 48, 51, 57, 59];  //Phuture - Acid Tracks
+	}
+	if(keyCode == 50){
+		notes = [49,50,50,50,49,50,50,50,49,50,50,50,54,0,53,0];  //Wayne Smith - Under My Sleng Teng
+	}
+	if(keyCode == 51){
+		notes =  [58,59,58,58,59,58,59,58,59,58,58,59,58,59,58,58];  //random acid 1
+	}
+	if(keyCode == 52){
+		notes = [0, 48, 56, 48, 0, 60, 56, 48, 0, 48, 60, 48, 0, 56, 56, 48];  //random acid 2
+	}
+	if(keyCode == 53){
+		notes = [51,50,49,50,52,52,52,51,49,51,0,0,0,0,0,0];  //Josh Wink - Are You There (at least kind of)
+	}
+	if(keyCode == 54){
+		notes = [0, 58, 58, 58, 0, 0, 60, 0, 58, 0, 58, 0, 58, 50, 52, 56];  //Public Energy - Three O' Three (not really tbh) 
+	}
+	if(keyCode == 55){
+		notes = [0, 56, 55, 0, 52, 48, 52, 0, 0, 52, 58, 52, 58, 0, 59, 60]; //random acid 3
+	}
+	if(keyCode == 56){
+		notes = [50,50,49,50,55,50,50,50,49,50,53,50,58,49,50,49]; //Fatboy Slim - Everybody needs a 303
+	}
+	if(keyCode == 57){
+		notes = [55,60,48,52,57,0,48,0,60,0,0,0,55,48,57,56];  //random acid 4
 	}
 	if(notes.length > 15){
 		return false;
